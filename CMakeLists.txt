@@ -17,6 +17,15 @@ CPMFindPackage(
         GIT_TAG v0.4.1
 )
 
+CPMFindPackage(
+        NAME simdjson
+        GITHUB_REPOSITORY simdjson/simdjson
+        VERSION 3.10.0
+        OPTIONS
+        "SIMDJSON_DEVELOPER_MODE OFF"
+        "SIMDJSON_JUST_HEADERS ON"
+)
+
 
 add_executable(LoadBalancer
         src/LoadBalancer/main.cpp
@@ -34,5 +43,5 @@ add_executable(Api
 )
 
 target_link_libraries(LoadBalancer PRIVATE Hermes)
-target_link_libraries(Api PRIVATE Hermes)
+target_link_libraries(Api PRIVATE simdjson Hermes)
 

@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  api1:
+    image: rinha-api:latest
+    command: ["/sockets/api1.sock"]
+    volumes:
+      - shared-sockets:/sockets
+      - ./data:/data:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.7"
+          memory: "265MB"
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+
+  api2:
+    image: rinha-api:latest
+    command: ["/sockets/api2.sock"]
+    volumes:
+      - shared-sockets:/sockets
+      - ./data:/data:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.7"
+          memory: "265MB"
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+
+  loadbalancer:
+    image: rinha-lb:latest
+    ports:
+      - "9999:9999"
+    volumes:
+      - shared-sockets:/sockets
+    depends_on:
+      - api1
+      - api2
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "20MB"
+    build:
+      context: .
+      dockerfile: Dockerfile.lb
+
+volumes:
+  shared-sockets:

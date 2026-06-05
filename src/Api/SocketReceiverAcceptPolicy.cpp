@@ -43,6 +43,7 @@ Hermes::ConnectionResultOper SocketReceiverAcceptPolicy::Listen(SocketReceiverDa
     strncpy(unAddr.sun_path, data.unixPath.c_str(), sizeof(unAddr.sun_path) - 1);
 
     if (bind(data.unixSocket, reinterpret_cast<sockaddr*>(&unAddr), sizeof(unAddr)) == macroSOCKET_ERROR) {
+        std::println("Erro no bind do socket UNIX ({}): {}", data.unixPath, strerror(errno));
         close(data.unixSocket);
         data.unixSocket = macroINVALID_SOCKET;
         return std::unexpected{ Hermes::ConnectionErrorEnum::AddressInUse };
