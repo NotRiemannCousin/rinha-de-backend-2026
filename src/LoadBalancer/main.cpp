@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <print>
+#include <unistd.h> // Para access() e sleep()
 
 using ForwarderSocket = Hermes::AsyncListenerSocket<
     SocketForwarderData,
@@ -15,6 +16,19 @@ using ForwarderSocket = Hermes::AsyncListenerSocket<
 >;
 
 int main() {
+    std::setvbuf(stdout, NULL, _IONBF, 0);
+    std::setvbuf(stderr, NULL, _IONBF, 0);
+
+    std::println("Load Balancer iniciado. Aguardando workers...");
+
+    // 2. BLOQUEIO DE SINCRONIZAÇÃO: O LB só avança quando os ficheiros .sock realmente existirem no disco.
+    while (access("/sockets/api1.sock", F_OK) != 0 || access("/sockets/api2.sock", F_OK) != 0) {
+        std::println("Aguardando criação dos sockets pela API1 e API2...");
+        sleep(1);
+    }
+
+    std::println("Sockets locais detetados! Fazendo bind do TCP 9999...");
+
     Hermes::FastIoLoop loop{ 1 }; // Inicia o scheduler
 
     SocketForwarderData data{
@@ -26,7 +40,7 @@ int main() {
     listenOpts.scheduler = &loop;
 
     auto s_acceptConn = [&loop](auto& listener) {
-        std::println("Load Balancer escutando.");
+        std::println("Load Balancer escutando ativamente.");
 
         SocketForwarderAcceptPolicy::AcceptOptions acceptOpts{};
         acceptOpts.scheduler = &loop;
@@ -41,8 +55,9 @@ int main() {
 
         return listener.AsyncAcceptOne(acceptOpts)
              | stdexec::let_value(s_handleClient)
-             | exec::repeat_until(); // <-- Modificado aqui
+             | exec::repeat_until();
     };
+
     auto serve = ForwarderSocket::Listen(std::move(data), listenOpts)
                | stdexec::let_value(s_acceptConn)
                | stdexec::upon_error([](auto err) {

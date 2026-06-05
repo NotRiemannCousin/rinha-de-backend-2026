@@ -1,0 +1,6 @@
+cmake-build-debug/CMakeFiles/
+cmake-build-debug/_deps/
+cmake-build-debug/Testing/
+.git/
+.idea/
+.clion.source.upload.marker

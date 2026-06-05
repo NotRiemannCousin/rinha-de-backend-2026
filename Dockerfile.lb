@@ -1,8 +1,9 @@
-FROM debian:bookworm-slim
+FROM debian:sid-slim
 WORKDIR /app
 
-COPY ./build/LoadBalancer /app/LoadBalancer
-COPY ./build/_deps/hermes-build/libhermes.so /usr/lib/libhermes.so
+RUN apt-get update && apt-get install -y libssl3 liburing2 ca-certificates && rm -rf /var/lib/apt/lists/*
+
+COPY ./cmake-build-debug/LoadBalancer /app/LoadBalancer
 
 ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 ENTRYPOINT ["/app/LoadBalancer"]
