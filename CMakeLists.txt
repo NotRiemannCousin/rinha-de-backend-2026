@@ -14,7 +14,7 @@ include(cmake/get_cpm.cmake)
 CPMFindPackage(
         NAME Hermes
         GITHUB_REPOSITORY NotRiemannCousin/Hermes
-        GIT_TAG v0.4.1
+        GIT_TAG v0.4.2
 )
 
 CPMFindPackage(
@@ -49,7 +49,7 @@ add_library(PerformanceFlags INTERFACE)
 target_compile_options(PerformanceFlags INTERFACE
         $<$<CONFIG:Release>:-O3>
         $<$<CONFIG:Release>:-ffast-math>
-        $<$<CONFIG:Release>:-march=native>
+        $<$<CONFIG:Release>:-march=haswell>
         $<$<CONFIG:Release>:-ftree-vectorize>
 )
 

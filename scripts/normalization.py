@@ -1,19 +1,12 @@
 import json
-from math import hypot
 import struct
 
 with open('data/references.json', 'r') as file:
-    with open('data/dataset.bin', 'wb') as output:
-        
-        data = json.loads(file.read())
-    
-        for v in data:
-            length = hypot(*v['vector'])
-            
-            # normalized = [el / length for el in v['vector']]
-            normalized = v['vector']
-            is_legit = v['label'] == 'legit'
-            
-            # O Mac Mini 2014 tb é little endian, nn vou fazer essa burrada dnv kk
-            output.write(struct.pack('<14f?', *normalized, is_legit))
-    
+    data = json.loads(file.read())
+
+with open('data/dataset.bin', 'wb') as output:
+    for v in data:
+        output.write(struct.pack('<16f', *(v['vector'] + [0.0, 0.0])))
+
+    for v in data:
+        output.write(struct.pack('<?', v['label'] == 'legit'))
