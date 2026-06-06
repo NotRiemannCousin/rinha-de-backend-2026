@@ -3,7 +3,8 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y libssl3 liburing2 ca-certificates && rm -rf /var/lib/apt/lists/*
 
-COPY ./cmake-build-debug/Api /app/Api
+COPY ./cmake-build-release/Api /app/Api
+# COPY ./cmake-build-debug/Api /app/Api
 
 ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 ENTRYPOINT ["/app/Api"]

@@ -8,18 +8,18 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.7"
-          memory: "265MB"
+          cpus: "0.4"
+          memory: "165MB"
     build:
       context: .
       dockerfile: Dockerfile.api
 
     security_opt:
-      - seccomp=unconfined # Permite que o contêiner use a syscall da io_uring
+      - seccomp=unconfined
     ulimits:
-      memlock: -1        # Remove o limite de memória travada exigido pela io_uring
+      memlock: -1
       nofile:
-        soft: 65536      # Aumenta o limite de arquivos abertos (essencial para a rinha)
+        soft: 65536
         hard: 65536
 
   api2:
@@ -31,18 +31,18 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.7"
-          memory: "265MB"
+          cpus: "0.4"
+          memory: "165MB"
     build:
       context: .
       dockerfile: Dockerfile.api
 
     security_opt:
-      - seccomp=unconfined # Permite que o contêiner use a syscall da io_uring
+      - seccomp=unconfined
     ulimits:
-      memlock: -1        # Remove o limite de memória travada exigido pela io_uring
+      memlock: -1
       nofile:
-        soft: 65536      # Aumenta o limite de arquivos abertos (essencial para a rinha)
+        soft: 65536
         hard: 65536
 
   loadbalancer:
@@ -58,18 +58,18 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.1"
+          cpus: "0.2"
           memory: "20MB"
     build:
       context: .
       dockerfile: Dockerfile.lb
 
     security_opt:
-      - seccomp=unconfined # Permite que o contêiner use a syscall da io_uring
+      - seccomp=unconfined
     ulimits:
-      memlock: -1        # Remove o limite de memória travada exigido pela io_uring
+      memlock: -1
       nofile:
-        soft: 65536      # Aumenta o limite de arquivos abertos (essencial para a rinha)
+        soft: 65536
         hard: 65536
 
 volumes:

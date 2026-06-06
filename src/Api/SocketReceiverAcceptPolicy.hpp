@@ -78,6 +78,14 @@ struct SocketReceiverAcceptPolicy::AcceptSender {
             }
 
             self->clientData.socket = static_cast<Hermes::SocketFd>(receivedFd);
+
+            auto* sched{ self->options.scheduler };
+            if (!sched || !sched->RegisterHandle(reinterpret_cast<Hermes::SocketHandle>(self->clientData.socket))) {
+                SocketReceiverAcceptPolicy::Close(self->clientData);
+                stdexec::set_error(std::move(self->receiver), Hermes::ConnectionErrorEnum::NoScheduler);
+                return;
+            }
+
             stdexec::set_value(std::move(self->receiver), std::move(self->clientData));
         }
 

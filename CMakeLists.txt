@@ -42,6 +42,17 @@ add_executable(Api
         src/Api/SocketReceiverData.hpp
 )
 
-target_link_libraries(LoadBalancer PRIVATE Hermes)
-target_link_libraries(Api PRIVATE simdjson Hermes)
+
+
+add_library(PerformanceFlags INTERFACE)
+
+target_compile_options(PerformanceFlags INTERFACE
+        $<$<CONFIG:Release>:-O3>
+        $<$<CONFIG:Release>:-ffast-math>
+        $<$<CONFIG:Release>:-march=native>
+        $<$<CONFIG:Release>:-ftree-vectorize>
+)
+
+target_link_libraries(LoadBalancer PRIVATE Hermes PerformanceFlags)
+target_link_libraries(Api PRIVATE simdjson Hermes PerformanceFlags)
 

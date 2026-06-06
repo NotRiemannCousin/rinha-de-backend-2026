@@ -21,7 +21,6 @@ int main() {
 
     std::println("Load Balancer iniciado. Aguardando workers...");
 
-    // 2. BLOQUEIO DE SINCRONIZAÇÃO: O LB só avança quando os ficheiros .sock realmente existirem no disco.
     while (access("/sockets/api1.sock", F_OK) != 0 || access("/sockets/api2.sock", F_OK) != 0) {
         std::println("Aguardando criação dos sockets pela API1 e API2...");
         sleep(1);
