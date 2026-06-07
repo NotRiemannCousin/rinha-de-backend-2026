@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="48" type="long" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppTypeNameHintsOptions" type="string" />
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Project" targetName="Api" />
+      <config projectName="Project" targetName="LoadBalancer" />
+      <config projectName="Project" targetName="stdexec" />
+      <config projectName="Project" targetName="simdjson" />
+      <config projectName="Project" targetName="Hermes" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3e0a6ee1-29d7-4e17-bfe7-8f2360e3727f" name="Changes" comment="Edições manuais 1">
+      <change afterPath="$PROJECT_DIR$/imgs/linear-search-1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.api" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.api" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.lb" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.lb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/normalization.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/normalization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Api/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Api/main.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="2533" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExportToHTMLSettings">
+    <option name="printScope" value="4" />
+    <option name="OPEN_IN_BROWSER" value="true" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/data/exportToHTML" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dockerfile" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;NotRiemannCousin&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/NotRiemannCousin/rinha-de-backend-2026.git&quot;,
+    &quot;accountId&quot;: &quot;f520839d-fed9-48dd-b565-c48db17e138d&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/cmake-build-debug/_deps/simdjson-src/singleheader/simdjson.cpp" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="fJ5fb7ng" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="Lib" />
+    </order>
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.3634931293300776" />
+      <entry key="MS500" value="1.8167689911100229" />
+      <entry key="S2" value="1.9506591012298182" />
+      <entry key="S5" value="1.9799635541299874" />
+      <entry key="S10" value="1.9899310855458512" />
+      <entry key="S30" value="1.9966323669657342" />
+      <entry key="S60" value="1.998321384598622" />
+      <entry key="M2" value="2.008774546971784" />
+      <entry key="M5" value="3.6517336573610577" />
+      <entry key="M10" value="13.526351249935983" />
+      <entry key="M15" value="25.12406258998047" />
+      <entry key="M30" value="52.16728622459794" />
+      <entry key="H1" value="83.7127217430891" />
+      <entry key="H2" value="121.88628944492527" />
+      <entry key="H4" value="173.87341755101747" />
+      <entry key="D1" value="307.46562915165504" />
+      <entry key="W1" value="354.8170510385655" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="5.723781950172888E-167" />
+      <entry key="S30" value="4.501826680955404E-56" />
+      <entry key="S60" value="2.7703910728361624E-28" />
+      <entry key="M2" value="2.299915907407461E-14" />
+      <entry key="M5" value="5.2817985373911345E-6" />
+      <entry key="M10" value="0.0032574720390336517" />
+      <entry key="M15" value="0.02836509139684081" />
+      <entry key="M30" value="0.29142009448764317" />
+      <entry key="H1" value="1.2753479565915868" />
+      <entry key="H2" value="3.5065866514403847" />
+      <entry key="H4" value="6.787923362733188" />
+      <entry key="D1" value="14.132758436745181" />
+      <entry key="W1" value="16.539577311893368" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.6033594963607791" />
+      <entry key="MS500" value="1.1183940858605244" />
+      <entry key="S2" value="1.6556745459030702" />
+      <entry key="S5" value="1.8473071221800228" />
+      <entry key="S10" value="1.9208988282150368" />
+      <entry key="S30" value="1.9729943943659836" />
+      <entry key="S60" value="1.986422276451889" />
+      <entry key="M2" value="2.0027959509236752" />
+      <entry key="M5" value="3.6490099013203112" />
+      <entry key="M10" value="13.52577600642378" />
+      <entry key="M15" value="25.144189508326154" />
+      <entry key="M30" value="52.43984799651466" />
+      <entry key="H1" value="84.9659067363664" />
+      <entry key="H2" value="125.37486137993123" />
+      <entry key="H4" value="180.64917981917208" />
+      <entry key="D1" value="321.5953758352355" />
+      <entry key="W1" value="371.35615107010483" />
+    </decayedShown>
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2026" />
+    <option name="minorVersion" value="2" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3EgyO0rvkRp3YQRvr2JqCufIMNp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "CMake Application.Api 1.executor": "Debug",
+    "CMake Application.Api 2.executor": "Debug",
+    "CMake Application.Api.executor": "Debug",
+    "CMake Application.LoadBalancer.executor": "Debug",
+    "Docker.Docker-Rinha.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "RunOnceActivity.west.config.association.type.startup.service": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "last_opened_file_path": "/root/CLionProjects/rinha-de-backend-2026/docker-compose.yml",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CMakeSettings"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/src/Api" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/Api" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.LoadBalancer">
+    <configuration default="true" type="CMakeBoostTestRunConfigurationType" factoryName="Boost Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeDoctestTestRunConfigurationType" factoryName="doctest Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Api 1" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="Api" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="Api">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Api 2" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="/sockets/api2.sock" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="Api" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="Api">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Hermes" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="Hermes" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoadBalancer" type="CMakeRunConfiguration" factoryName="Application" singleton="false" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="LoadBalancer" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="LoadBalancer">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="simdjson" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="simdjson" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="stdexec" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="stdexec" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Rinha" type="CompoundRunConfigurationType">
+      <toRun name="Api 1" type="CMakeRunConfiguration" />
+      <toRun name="Api 2" type="CMakeRunConfiguration" />
+      <toRun name="LoadBalancer" type="CMakeRunConfiguration" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Docker-Rinha" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2">
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Api 1" run_configuration_type="CMakeRunConfiguration" run_configuration_target="CMakeBuildProfile:Release" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.LoadBalancer" />
+      <item itemvalue="CMake Application.Api 1" />
+      <item itemvalue="CMake Application.Api 2" />
+      <item itemvalue="CMake Application.Hermes" />
+      <item itemvalue="CMake Application.simdjson" />
+      <item itemvalue="CMake Application.stdexec" />
+      <item itemvalue="Compound.Rinha" />
+      <item itemvalue="Docker.Docker-Rinha" />
+    </list>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e0a6ee1-29d7-4e17-bfe7-8f2360e3727f" name="Changes" comment="" />
+      <created>1780614471943</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780614471943</updated>
+      <workItem from="1780614473396" duration="7985000" />
+      <workItem from="1780654481891" duration="22063000" />
+      <workItem from="1780706807792" duration="7432000" />
+      <workItem from="1780738693935" duration="15460000" />
+      <workItem from="1780759546196" duration="9501000" />
+    </task>
+    <task id="LOCAL-00001" summary="&quot;Gemini estou com preguiça crie isso daqui que é chatinho de fazer&quot;">
+      <option name="closed" value="true" />
+      <created>1780619312932</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1780619312932</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Ok, as LLMs me levaram até aqui agr é eu e Deus">
+      <option name="closed" value="true" />
+      <created>1780683692829</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1780683692829</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Ok, as LLMs me levaram até aqui agr é eu e Deus">
+      <option name="closed" value="true" />
+      <created>1780684014672</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1780684014672</updated>
+    </task>
+    <task id="LOCAL-00004" summary="io_uring register problem">
+      <option name="closed" value="true" />
+      <created>1780692133223</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1780692133223</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Edições manuais 1">
+      <option name="closed" value="true" />
+      <created>1780750709431</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1780750709431</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.api" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+    <isAutomaticBootstrapAfterUpdate value="false" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&quot;Gemini estou com preguiça crie isso daqui que é chatinho de fazer&quot;" />
+    <MESSAGE value="Ok, as LLMs me levaram até aqui agr é eu e Deus" />
+    <MESSAGE value="io_uring register problem" />
+    <MESSAGE value="Edições manuais 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edições manuais 1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="CidrExceptionBreakpoint" />
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

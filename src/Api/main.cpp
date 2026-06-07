@@ -7,6 +7,7 @@
 #include "SocketReceiverAcceptPolicy.hpp"
 
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <array>
@@ -24,26 +25,21 @@
 
 #include <simdjson.h>
 
-#ifndef NDEBUG
-#define DBG_PRINTLN(...) std::println(__VA_ARGS__)
-#else
-#define DBG_PRINTLN(...) ((void)0)
-#endif
-
 using namespace std::string_view_literals;
 
 struct alignas(32) Vector16 {
     float v[16];
 };
 
-constexpr size_t DatasetSize{ 3'000'000 };
+static size_t s_datasetCount{};
+static const Vector16* s_features{};
+static const bool* s_isLegit{};
 
-struct DatasetSOA {
-    std::array<Vector16, DatasetSize> features;
-    std::array<bool, DatasetSize> isLegit;
-};
+static size_t s_clustersCount{};
+static const Vector16* s_centroids{};
+static const uint32_t* s_clusterStarts{};
+static const uint32_t* s_clusterEnds{};
 
-static DatasetSOA* s_dataset{};
 static std::array<float, 10000> s_mccRisk{};
 
 constexpr std::string_view S_FRAUD_RESPONSES[]{
@@ -59,10 +55,37 @@ constexpr std::string_view S_READY_RESPONSE{ "HTTP/1.1 200 OK\r\nContent-Length:
 constexpr std::string_view S_NOT_FOUND_RESPONSE{ "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n" };
 
 static void S_LoadDataset() {
-    int fd{ open("/data/dataset.bin", O_RDONLY) };
-    if (fd >= 0) {
-        s_dataset = static_cast<DatasetSOA*>(mmap(nullptr, sizeof(DatasetSOA), PROT_READ, MAP_SHARED, fd, 0));
-        close(fd);
+    int fdData{ open("/data/dataset.bin", O_RDONLY) };
+    if (fdData >= 0) {
+        struct stat sb{};
+        if (fstat(fdData, &sb) == 0) {
+            // Cada vetor tem 64 bytes (16 floats). O array de booleanos vem depois.
+            // Tamanho total = N * 64 + N * 1 = N * 65 bytes
+            s_datasetCount = static_cast<size_t>(sb.st_size / 65);
+            void* mapped{ mmap(nullptr, static_cast<size_t>(sb.st_size), PROT_READ, MAP_SHARED, fdData, 0) };
+            if (mapped != MAP_FAILED) {
+                s_features = static_cast<const Vector16*>(mapped);
+                // Os labels (bool) começam imediatamente após o array de Vector16 (que tem s_datasetCount elementos)
+                s_isLegit = reinterpret_cast<const bool*>(s_features + s_datasetCount);
+            }
+        }
+        close(fdData);
+    }
+
+    int fdIdx{ open("/data/indexes.bin", O_RDONLY) };
+    if (fdIdx >= 0) {
+        struct stat sb{};
+        if (fstat(fdIdx, &sb) == 0) {
+            // Cada cluster guarda: 1 Vector16 (64 bytes) + 1 start (4 bytes) + 1 end (4 bytes) = 72 bytes por cluster.
+            s_clustersCount = static_cast<size_t>(sb.st_size / 72);
+            void* mapped{ mmap(nullptr, static_cast<size_t>(sb.st_size), PROT_READ, MAP_SHARED, fdIdx, 0) };
+            if (mapped != MAP_FAILED) {
+                s_centroids = static_cast<const Vector16*>(mapped);
+                s_clusterStarts = reinterpret_cast<const uint32_t*>(s_centroids + s_clustersCount);
+                s_clusterEnds = s_clusterStarts + s_clustersCount;
+            }
+        }
+        close(fdIdx);
     }
 }
 
@@ -88,7 +111,7 @@ static void S_LoadDataset() {
 
 static void S_LoadMccRisk() {
     s_mccRisk.fill(0.5f);
-    simdjson::ondemand::parser parser;
+    simdjson::ondemand::parser parser{};
     auto json{ simdjson::padded_string::load("/data/mcc_risk.json") };
     if (json.error()) return;
     simdjson::ondemand::document doc{ parser.iterate(json.value()) };
@@ -116,6 +139,7 @@ struct ClientState {
     struct Neighbor { float dist; uint32_t idx; };
     std::array<Neighbor, 5> top5{};
     uint32_t calcIdx{};
+    uint32_t calcEnd{};
     std::string_view response{};
 };
 
@@ -170,17 +194,19 @@ static auto S_HandleClientAsync(std::shared_ptr<ClientState<SocketT>> state) {
 
         if (req.starts_with("GET ") || req.starts_with("get ")) {
             state->response = S_READY_RESPONSE;
-            state->calcIdx = DatasetSize;
+            state->calcIdx = 0;
+            state->calcEnd = 0;
             return stdexec::just();
         } else if (!req.starts_with("POST ") && !req.starts_with("post ")) {
             state->response = S_NOT_FOUND_RESPONSE;
-            state->calcIdx = DatasetSize;
+            state->calcIdx = 0;
+            state->calcEnd = 0;
             return stdexec::just();
         }
 
         const char* body{ state->socketView.data() + state->bodyIdx };
         try {
-            thread_local simdjson::ondemand::parser s_parser;
+            thread_local simdjson::ondemand::parser s_parser{};
             auto doc{ s_parser.iterate(body, state->contentLength, state->socketView.capacity() - state->bodyIdx) };
 
             auto txObj{ doc["transaction"] };
@@ -247,23 +273,54 @@ static auto S_HandleClientAsync(std::shared_ptr<ClientState<SocketT>> state) {
                 0.0f, 0.0f
             };
 
+            auto centroidsSpan{ std::span{ s_centroids, s_clustersCount } };
+            auto getDist = [&state](const Vector16& centroid) {
+                float dist{ 0.0f };
+                for (int j{ 0 }; j < 16; ++j) {
+                    float diff{ state->q[j] - centroid.v[j] };
+                    dist += diff * diff;
+                }
+                return dist;
+            };
+
+            // Proteção contra s_clustersCount == 0 (ex: dataset.bin não foi gerado corretamente)
+            if (s_clustersCount > 0) {
+                auto bestCentroidIt{ std::ranges::min_element(centroidsSpan, std::ranges::less{}, getDist) };
+                uint32_t bestCluster{ static_cast<uint32_t>(std::distance(centroidsSpan.begin(), bestCentroidIt)) };
+                state->calcIdx = s_clusterStarts[bestCluster];
+                state->calcEnd = s_clusterEnds[bestCluster];
+            } else {
+                state->calcIdx = 0;
+                state->calcEnd = 0;
+            }
+
             state->top5.fill({ std::numeric_limits<float>::infinity(), UINT32_MAX });
-            state->calcIdx = 0;
+
         } catch (...) {
             state->response = S_FRAUD_RESPONSES[5];
-            state->calcIdx = DatasetSize;
+            state->calcIdx = 0;
+            state->calcEnd = 0;
         }
 
         return stdexec::just();
     };
 
-    auto s_calcChunk = [state]() {
+    auto s_calcChunk = [state](auto&&...) {
         return stdexec::schedule(state->loop->GetScheduler())
              | stdexec::let_value([state]() {
-                   if (state->calcIdx >= DatasetSize) return stdexec::just(true);
+                   if (state->calcIdx >= state->calcEnd) {
+                       if (state->response.empty()) {
+                           int fraudCount{ 0 };
+                           for (const auto& n : state->top5) {
+                               if (n.idx < s_datasetCount && !s_isLegit[n.idx]) fraudCount++;
+                           }
+                           state->response = S_FRAUD_RESPONSES[fraudCount];
+                       }
+                       return stdexec::just(true);
+                   }
 
-                   uint32_t end{ std::min(state->calcIdx + 163840, static_cast<uint32_t>(DatasetSize)) };
-                   auto chunk{ std::span{ s_dataset->features }.subspan(state->calcIdx, end - state->calcIdx) };
+                   uint32_t end{ std::min(state->calcIdx + 16384, state->calcEnd) };
+                   auto chunk{ std::span{ s_features, s_datasetCount }.subspan(state->calcIdx, end - state->calcIdx) };
 
                    for (auto&& [i, feature] : std::views::enumerate(chunk)) {
                        float dist{ 0.0f };
@@ -279,16 +336,6 @@ static auto S_HandleClientAsync(std::shared_ptr<ClientState<SocketT>> state) {
                    }
 
                    state->calcIdx = end;
-
-                   if (state->calcIdx >= DatasetSize) {
-                       int fraudCount{ 0 };
-                       for (const auto& n : state->top5) {
-                           if (!s_dataset->isLegit[n.idx]) fraudCount++;
-                       }
-                       state->response = S_FRAUD_RESPONSES[fraudCount];
-                       return stdexec::just(true);
-                   }
-
                    return stdexec::just(false);
                });
     };
@@ -309,11 +356,8 @@ static auto S_HandleClientAsync(std::shared_ptr<ClientState<SocketT>> state) {
          | exec::repeat_until()
          | stdexec::let_value(s_extractHeaders)
          | stdexec::let_value(s_parseAndInitCalc)
-         | stdexec::let_value([s_calcChunk]() {
-               return stdexec::just()
-                    | stdexec::let_value(s_calcChunk)
-                    | exec::repeat_until();
-           })
+         | stdexec::let_value(s_calcChunk)
+         | exec::repeat_until()
          | stdexec::let_value(s_processAndSend)
          | stdexec::let_value(s_onComplete)
          | exec::repeat_until();
@@ -358,7 +402,6 @@ int main(int argc, char* argv[]) {
 
     auto serve{ ReceiverSocket::Listen(std::move(data), listenOpts)
                | stdexec::let_value([&loop](auto& listener) {
-                     DBG_PRINTLN("API: Escuta iniciada. Aguardando repasse de FD do LoadBalancer...");
                      return S_ServeLoop(listener, loop);
                  })
                | stdexec::let_error([](auto) {

@@ -4,7 +4,6 @@ services:
     command: ["/sockets/api1.sock"]
     volumes:
       - shared-sockets:/sockets
-      - ./data:/data:ro
     deploy:
       resources:
         limits:
@@ -27,7 +26,6 @@ services:
     command: ["/sockets/api2.sock"]
     volumes:
       - shared-sockets:/sockets
-      - ./data:/data:ro
     deploy:
       resources:
         limits:

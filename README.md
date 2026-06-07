@@ -6,7 +6,8 @@ Esse repositório contem o código da minha participação na [Rinha de Backend 
 
 ## Tentativas
 
-Eu queria testar já de cara algumas otimizações em relação à representação dos dados. Infelizmente, depois de bater cabeça com alguns testes e pesquisas, eu cheguei à conclusão de que a arquitetura do servidor do projeto (Haswell, de um Mac Mini Late 2014) aparenta inviabilizar "truques baratos" como quantization (farei testes na maquina real quando for possivel). Pelo menos, ainda dá para normalizar todos os vetores para não ter que calculá-los na hora da comparação (em `normalization.py`).
+Coming soon...
+<!-- Eu queria testar já de cara algumas otimizações em relação à representação dos dados. Infelizmente, depois de bater cabeça com alguns testes e pesquisas, eu cheguei à conclusão de que a arquitetura do servidor do projeto (Haswell, de um Mac Mini Late 2014) aparenta inviabilizar "truques baratos" como quantization (farei testes na maquina real quando for possivel). Pelo menos, ainda dá para normalizar todos os vetores para não ter que calculá-los na hora da comparação (em `normalization.py`).
 
 Outra otimização, agr com relação a comunicação com a rede, é usar sockets UNIX com `SCM_RIGHTS` pra repassar o socket direto pro processo da API. Sinceramente eu nn sei até que nível isso é fair play afinal o docker estar em modo `bridge` é obrigatório então imagino que era pra gente fingir ser maquinas diferentes, mas se nn foi explicitado tá tudo bem né? Enfim kk.
 
@@ -38,4 +39,4 @@ Bom, agr só falta implementar...
 
 # ???
 
-Esses só testando pra ver se vale a pena: Redução de dimensão e HNSW.
+Esses só testando pra ver se vale a pena: Redução de dimensão e HNSW. -->
