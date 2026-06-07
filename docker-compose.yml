@@ -1,6 +1,6 @@
 services:
   api1:
-    image: seu_usuario/rinha-api:latestt
+    image: lastarchimedes/rinha-api:latest
     command: ["/sockets/api1.sock"]
     volumes:
       - shared-sockets:/sockets
@@ -21,7 +21,7 @@ services:
         hard: 65536
 
   api2:
-    image: seu_usuario/rinha-api:latest
+    image: lastarchimedes/rinha-api:latest
     command: ["/sockets/api2.sock"]
     volumes:
       - shared-sockets:/sockets
@@ -42,7 +42,7 @@ services:
         hard: 65536
 
   loadbalancer:
-    image: seu_usuario/rinha-lb:latest
+    image: lastarchimedes/rinha-lb:latest
     ports:
       - "9999:9999"
     volumes:
