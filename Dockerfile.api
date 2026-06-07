@@ -11,17 +11,9 @@ RUN cmake --build build --target Api
 FROM debian:sid-slim
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y libssl3 liburing2 ca-certificates tar xz-utils gzip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libssl3 liburing2 ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /src/build/Api /app/Api
-COPY ./data /data
-
-RUN cd /data && \
-    for f in *.tar.*; do \
-        if [ -f "$f" ]; then \
-            tar -xf "$f" && rm "$f"; \
-        fi; \
-    done
 
 ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 ENTRYPOINT ["/app/Api"]
