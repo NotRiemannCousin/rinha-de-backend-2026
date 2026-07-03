@@ -1,5 +1,5 @@
 #pragma once
-#include "SocketForwarderData.hpp"
+#include <LoadBalancer/SocketForwarder/SocketForwarderData.hpp>
 #include <Hermes/Socket/Async/_base/ExecutionContext/FastIoExecutionContext.hpp>
 #include <Hermes/Socket/_base.hpp>
 #include <stdexec/execution.hpp>
@@ -31,7 +31,7 @@ struct SocketForwarderAcceptPolicy {
     struct ShutdownSender;
 
     static Hermes::ConnectionResultOper Listen(SocketForwarderData& data, int backlog, ListenOptions options);
-    static AcceptSender Accept(SocketForwarderData& listenData, AcceptOptions options);
+    static AcceptSender Accept(SocketForwarderData& listenData, SocketForwarderData&& clientData, AcceptOptions options);
     static ShutdownSender Shutdown(SocketForwarderData& data);
 
     static void Close(SocketForwarderData& data) noexcept;
@@ -42,15 +42,16 @@ struct SocketForwarderAcceptPolicy {
     inline static std::atomic<size_t> roundRobinCounter{0};
 };
 
-
 struct SocketForwarderAcceptPolicy::AcceptSender {
     using sender_concept = stdexec::sender_t;
     using completion_signatures = stdexec::completion_signatures<
         stdexec::set_value_t(SocketForwarderData),
-        stdexec::set_error_t(Hermes::ConnectionErrorEnum)
+        stdexec::set_error_t(Hermes::ConnectionErrorEnum),
+        stdexec::set_stopped_t()
     >;
 
     SocketForwarderData* listenData;
+    SocketForwarderData clientData;
     AcceptOptions options;
 
     template<class Receiver>
@@ -63,18 +64,18 @@ struct SocketForwarderAcceptPolicy::AcceptSender {
         std::byte buffer[2 * (sizeof(sockaddr_storage) + 16)]{};
         socklen_t addrLen{ sizeof(sockaddr_storage) };
 
-        OperationState(SocketForwarderData* data, AcceptOptions opts, Receiver recv) :
-            listenData{ data }, options{ opts }, receiver{ std::move(recv) }, clientData{ data->MakeChild() } {}
+        OperationState(SocketForwarderData* lData, SocketForwarderData cData, AcceptOptions opts, Receiver recv) :
+            listenData{ lData }, clientData{ std::move(cData) }, options{ opts }, receiver{ std::move(recv) } {}
 
-        static void IoCallback(void* context, size_t bytesTransferred, bool success) noexcept {
+        static void S_IoCallback(void* context, size_t bytesTransferred, bool success) noexcept {
             auto* self{ static_cast<OperationState*>(context) };
 
             if (!success || static_cast<int>(bytesTransferred) < 0) {
-                SocketForwarderAcceptPolicy::Close(self->clientData);
                 stdexec::set_error(std::move(self->receiver), Hermes::ConnectionErrorEnum::ConnectionFailed);
                 return;
             }
 
+            self->clientData = self->listenData->MakeChild();
             self->clientData.socket = static_cast<Hermes::SocketFd>(static_cast<int>(bytesTransferred));
 
             if (!self->listenData->unixSockets.empty()) {
@@ -86,10 +87,11 @@ struct SocketForwarderAcceptPolicy::AcceptSender {
             stdexec::set_value(std::move(self->receiver), std::move(self->clientData));
         }
 
-        friend void tag_invoke(stdexec::start_t, OperationState& self) noexcept {
+        void start() & noexcept {
+            auto& self{ *this };
             self.status = {};
-            self.status.context = &self;
-            self.status.callback = IoCallback;
+            self.status.context = this;
+            self.status.callback = S_IoCallback;
 
             auto* loop = Hermes::FastIoLoop::GetLoopForSocket(static_cast<int>(self.listenData->socket));
             if (!loop) {
@@ -107,8 +109,8 @@ struct SocketForwarderAcceptPolicy::AcceptSender {
     };
 
     template<class Receiver>
-    friend OperationState<Receiver> tag_invoke(stdexec::connect_t, const AcceptSender& self, Receiver r) {
-        return { self.listenData, self.options, std::move(r) };
+    OperationState<Receiver> connect(Receiver r) && {
+        return { listenData, std::move(clientData), options, std::move(r) };
     }
 };
 
@@ -127,22 +129,22 @@ struct SocketForwarderAcceptPolicy::ShutdownSender {
         SocketForwarderData* data;
         Receiver receiver;
 
-        friend void tag_invoke(stdexec::start_t, OperationState& self) noexcept {
-            if (self.data->socket != macroINVALID_SOCKET) {
-                shutdown(self.data->socket, SHUT_WR);
+        void start() & noexcept {
+            if (data->socket != macroINVALID_SOCKET) {
+                shutdown(data->socket, SHUT_WR);
             }
-            stdexec::set_value(std::move(self.receiver));
+            stdexec::set_value(std::move(receiver));
         }
     };
 
     template<class Receiver>
-    friend OperationState<Receiver> tag_invoke(stdexec::connect_t, const ShutdownSender& self, Receiver r) {
-        return { self.data, std::move(r) };
+    OperationState<Receiver> connect(Receiver r) const {
+        return { data, std::move(r) };
     }
 };
 
-inline SocketForwarderAcceptPolicy::AcceptSender SocketForwarderAcceptPolicy::Accept(SocketForwarderData& listenData, AcceptOptions options) {
-    return AcceptSender{ &listenData, options };
+inline SocketForwarderAcceptPolicy::AcceptSender SocketForwarderAcceptPolicy::Accept(SocketForwarderData& listenData, SocketForwarderData&& clientData, AcceptOptions options) {
+    return AcceptSender{ &listenData, std::move(clientData), options };
 }
 
 inline SocketForwarderAcceptPolicy::ShutdownSender SocketForwarderAcceptPolicy::Shutdown(SocketForwarderData& data) {

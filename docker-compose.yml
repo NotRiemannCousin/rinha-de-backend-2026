@@ -1,9 +1,10 @@
 services:
   api1:
-    image: lastarchimedes/rinha-api:latest
+    image: rinha-api:latest
     command: ["/sockets/api1.sock"]
     volumes:
       - shared-sockets:/sockets
+      - ./data:/data
     networks:
       - rinha-network
     deploy:
@@ -11,7 +12,9 @@ services:
         limits:
           cpus: "0.4"
           memory: "165MB"
-
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     security_opt:
       - seccomp=unconfined
     ulimits:
@@ -21,10 +24,11 @@ services:
         hard: 65536
 
   api2:
-    image: lastarchimedes/rinha-api:latest
+    image: rinha-api:latest
     command: ["/sockets/api2.sock"]
     volumes:
       - shared-sockets:/sockets
+      - ./data:/data
     networks:
       - rinha-network
     deploy:
@@ -32,7 +36,8 @@ services:
         limits:
           cpus: "0.4"
           memory: "165MB"
-
+    depends_on:
+      - api1
     security_opt:
       - seccomp=unconfined
     ulimits:
@@ -42,7 +47,7 @@ services:
         hard: 65536
 
   loadbalancer:
-    image: lastarchimedes/rinha-lb:latest
+    image: rinha-lb:latest
     ports:
       - "9999:9999"
     volumes:
@@ -58,7 +63,9 @@ services:
         limits:
           cpus: "0.2"
           memory: "20MB"
-
+    build:
+      context: .
+      dockerfile: Dockerfile.lb
     security_opt:
       - seccomp=unconfined
     ulimits:

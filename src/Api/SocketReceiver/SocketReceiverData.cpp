@@ -1,4 +1,4 @@
-#include "SocketReceiverData.hpp"
+#include <Api/SocketReceiver/SocketReceiverData.hpp>
 #include <utility>
 
 SocketReceiverData::SocketReceiverData(std::string path)

@@ -1,19 +1,33 @@
 FROM debian:sid-slim AS builder
 WORKDIR /src
 
-RUN apt-get update && apt-get install -y cmake ninja-build g++ git libssl-dev liburing-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    cmake ninja-build gcc-16 g++-16 git libssl-dev liburing-dev ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+ENV CC=gcc-16 CXX=g++-16 \
+    CPM_SOURCE_CACHE=/root/.cache/CPM
 
-RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-RUN cmake --build build --target LoadBalancer
+COPY CMakeLists.txt CMakeLists.txt
+COPY ./cmake/ ./cmake/
+COPY ./src/ ./src/
+COPY ./include/ ./include/
+
+RUN mkdir /dist
+
+RUN --mount=type=cache,id=lb-build,target=/src/build \
+    --mount=type=cache,target=/root/.cache/CPM \
+    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build --target LoadBalancer -j $(nproc) && \
+    cp build/LoadBalancer /dist/LoadBalancer
 
 FROM debian:sid-slim
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y libssl3 liburing2 ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libssl3 liburing2 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /src/build/LoadBalancer /app/LoadBalancer
+COPY --from=builder /dist/LoadBalancer /app/LoadBalancer
 
-ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 ENTRYPOINT ["/app/LoadBalancer"]

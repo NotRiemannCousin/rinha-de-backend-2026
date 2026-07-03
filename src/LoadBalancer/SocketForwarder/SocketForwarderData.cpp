@@ -1,4 +1,4 @@
-#include "SocketForwarderData.hpp" // Depois resolvo isso
+#include <LoadBalancer/SocketForwarder/SocketForwarderData.hpp>
 #include <utility>
 
 SocketForwarderData::SocketForwarderData(Hermes::IpEndpoint tcpEndpoint, std::vector<std::string> paths)

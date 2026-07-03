@@ -3,11 +3,11 @@
 #include <Hermes/Endpoint/IpEndpoint/IpAddress.hpp>
 #include <stdexec/execution.hpp>
 #include <exec/repeat_until.hpp>
-#include "SocketForwarderAcceptPolicy.hpp"
+#include <LoadBalancer/SocketForwarder/SocketForwarderAcceptPolicy.hpp>
 #include <vector>
 #include <string>
 #include <print>
-#include <unistd.h> // Para access() e sleep()
+#include <unistd.h>
 
 using ForwarderSocket = Hermes::AsyncListenerSocket<
     SocketForwarderData,
@@ -22,16 +22,16 @@ int main() {
     std::println("Load Balancer iniciado. Aguardando workers...");
 
     while (access("/sockets/api1.sock", F_OK) != 0 || access("/sockets/api2.sock", F_OK) != 0) {
-        std::println("Aguardando criação dos sockets pela API1 e API2...");
+        std::println("Aguardando criacao dos sockets pela API1 e API2...");
         sleep(1);
     }
 
     std::println("Sockets locais detetados! Fazendo bind do TCP 9999...");
 
-    Hermes::FastIoLoop loop{ 1 }; // Inicia o scheduler
+    Hermes::FastIoLoop loop{ 1 };
 
     SocketForwarderData data{
-        Hermes::IpEndpoint{Hermes::IpAddress::FromIpv4({0, 0, 0, 0}), 9999},
+        Hermes::IpEndpoint{Hermes::IpAddress::FromIpv4({ 0, 0, 0, 0 }), 9999},
         std::vector<std::string>{"/sockets/api1.sock", "/sockets/api2.sock"}
     };
 
@@ -45,25 +45,27 @@ int main() {
         acceptOpts.scheduler = &loop;
 
         auto s_handleClient = [](auto&& clientSocket) {
-            // Repasse SCM_RIGHTS já foi feito no Accept. Apenas fecha a representação local.
             clientSocket.Close();
-
-            // Retorna false para o repeat_until() continuar em loop infinito
             return stdexec::just(false);
         };
 
-        return listener.AsyncAcceptOne(acceptOpts)
-             | stdexec::let_value(s_handleClient)
+        return stdexec::just()
+             | stdexec::let_value([&listener, acceptOpts, s_handleClient]() {
+                   return listener.AsyncAcceptOne(acceptOpts)
+                        | stdexec::let_value(s_handleClient);
+               })
              | exec::repeat_until();
     };
 
     auto serve = ForwarderSocket::Listen(std::move(data), listenOpts)
                | stdexec::let_value(s_acceptConn)
-               | stdexec::upon_error([](auto err) {
-                     std::println("Erro no listener do Load Balancer.");
+               | stdexec::upon_error([]<typename T>(T err) {
+                    if constexpr (std::formattable<T, char>)
+                        std::println("Erro no listener do Load Balancer: {}", err);
+                    else
+                        std::println("Erro desconhecido no listener do Load Balancer");
                  });
 
-    // Inicia e bloqueia a thread
     stdexec::sync_wait(std::move(serve));
 
     return 0;
