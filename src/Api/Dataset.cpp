@@ -43,6 +43,7 @@ static void LoadMappedSoa(const char* path, std::span<const Ts>&... elems) {
 
 #pragma endregion
 
+    madvise(const_cast<void*>(mappedPtr), static_cast<size_t>(fileStat.st_size), MADV_WILLNEED);
     std::span fileSpan{ static_cast<const std::byte*>(mappedPtr), static_cast<size_t>(fileStat.st_size) };
     const size_t elementCount{ fileStat.st_size / registerSize };
 

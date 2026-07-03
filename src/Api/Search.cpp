@@ -23,7 +23,7 @@ static void InsertSorted(T& vecs, const typename T::value_type newVal) {
 
 
 unsigned int Search(const Query input) {
-    constexpr uint32_t ClusterCount{ 1 };
+    constexpr uint32_t ClusterCount{ 11 };
 
     struct ClusterReg {
         [[maybe_unused]] float dist{ std::numeric_limits<float>::max() };
